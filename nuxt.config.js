@@ -1,4 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
+import en from 'vuetify/es5/locale/en'
+import id from 'vuetify/es5/locale/id'
+import locales from './utils/locales'
 
 export default {
   mode: 'universal',
@@ -30,7 +33,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~plugins/vee-validate'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -45,7 +48,24 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    [
+      'nuxt-i18n',
+      {
+        vueI18n: {
+          silentTranslationWarn: true
+        },
+        defaultLocale: 'en-us',
+        vueI18nLoader: true,
+        lazy: true,
+        detectBrowserLanguage: {
+          useCookie: true,
+          alwaysRedirect: true
+        },
+        langDir: 'locales/',
+        locales
+      }
+    ]
   ],
   /*
    ** Axios module configuration
@@ -59,10 +79,16 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
       themes: {
+        light: {
+          primary: '#f1f2f6',
+          secondary: '#2ed573',
+          accent: '#27ae60',
+          error: '#e74c3c',
+          warning: '#f39c12'
+        },
         dark: {
-          primary: colors.blue.darken2,
+          primary: colors.blue.darken4,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
@@ -71,6 +97,10 @@ export default {
           success: colors.green.accent3
         }
       }
+    },
+    lang: {
+      locales: { 'en-us': en, 'en-uk': en, id },
+      current: 'id'
     }
   },
   /*
@@ -80,6 +110,7 @@ export default {
     /*
      ** You can extend webpack config here
      */
+    transpile: ['vee-validate/dist/rules'],
     extend(config, ctx) {}
   }
 }
