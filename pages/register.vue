@@ -11,73 +11,71 @@
           <div class="white--text title text-center">Sign Up</div>
         </v-col>
       </v-row>
-      <form action="">
-        <v-container grid-list-md fluid class="">
-          <v-row wrap>
-            <v-col cols="12">
-              <v-text-field
-                v-model="username"
-                v-validate="'required'"
-                :loading="isLoading"
-                :error-messages="errors.collect('username')"
-                label="Username"
-                required
-                data-vv-name="username"
-                data-vv-as="username"
-                clearable
-                flat
-                solo
-                color="primary"
-              />
-              <v-text-field
-                v-model="email"
-                v-validate="'required|email'"
-                :loading="isLoading"
-                :error-messages="errors.collect('email')"
-                label="Email"
-                required
-                data-vv-name="email"
-                data-vv-as="email"
-                clearable
-                flat
-                solo
-                color="primary"
-              />
-              <v-text-field
-                v-model="password"
-                v-validate="'required'"
-                :type="isPasswordDisplayed ? 'text' : 'password'"
-                :append-icon="appendedIcon"
-                :error-messages="errors.collect('password')"
-                :loading="isLoading"
-                @click:append="onAppendedIconClicked"
-                solo
-                flat
-                color="primary"
-                clearable="clearable"
-                required="required"
-                label="Password"
-                name="password"
-                data-vv-name="password"
-                data-vv-as="Password"
-              />
-              <v-btn
-                :disabled="isActionButtonDisabled"
-                :loading="isLoading"
-                @click="onSignUpButtonClick"
-                class="white--text"
-                color="secondary"
-                block="block"
-                rounded
-                depressed="depressed"
-                type="submit"
-              >
-                Sign Up
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
-      </form>
+      <v-container grid-list-md fluid class="">
+        <v-row wrap>
+          <v-col cols="12">
+            <v-text-field
+              v-model="username"
+              v-validate="'required'"
+              :loading="isLoading"
+              :error-messages="errors.collect('username')"
+              label="Username"
+              required
+              data-vv-name="username"
+              data-vv-as="username"
+              clearable
+              flat
+              solo
+              color="primary"
+            />
+            <v-text-field
+              v-model="email"
+              v-validate="'required|email'"
+              :loading="isLoading"
+              :error-messages="errors.collect('email')"
+              label="Email"
+              required
+              data-vv-name="email"
+              data-vv-as="email"
+              clearable
+              flat
+              solo
+              color="primary"
+            />
+            <v-text-field
+              v-model="password"
+              v-validate="'required'"
+              :type="isPasswordDisplayed ? 'text' : 'password'"
+              :append-icon="appendedIcon"
+              :error-messages="errors.collect('password')"
+              :loading="isLoading"
+              @click:append="onAppendedIconClicked"
+              solo
+              flat
+              color="primary"
+              clearable="clearable"
+              required="required"
+              label="Password"
+              name="password"
+              data-vv-name="password"
+              data-vv-as="Password"
+            />
+            <v-btn
+              :disabled="isActionButtonDisabled"
+              :loading="isLoading"
+              @click="onSignUpButtonClick"
+              class="white--text"
+              color="secondary"
+              block="block"
+              rounded
+              depressed="depressed"
+              type="submit"
+            >
+              Sign Up
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
       <v-row justify-center class="px-4">
         <v-col cols="12">
           Sudah memiliki akun
@@ -148,7 +146,7 @@ export default {
           Cookie.set('token', userData.jwt, {
             expires: 1 / 2
           })
-          // this.$axios.setHeader('Authorization', `Bearer ${userData}`)
+          this.$axios.setHeader('Authorization', `Bearer ${userData.jwt}`)
 
           this.$store.commit(types.SET_TOKEN, userData.jwt)
           this.$store.commit(types.SET_USER_DATA, userData.user)

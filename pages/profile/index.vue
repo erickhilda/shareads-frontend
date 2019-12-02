@@ -16,7 +16,8 @@ export default {
   methods: {
     onLogout() {
       Cookie.remove('token')
-      this.$router.replace({ name: '/' })
+      this.$router.replace({ name: 'index___id' })
+      this.$axios.setHeader('Authorization', ``)
       this.$store.commit(types.SET_TOKEN, null)
     }
   }

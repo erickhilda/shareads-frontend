@@ -124,12 +124,13 @@ export default {
           password: this.password
         }
         const userData = await this.$axios.$post(`/auth/local`, credential)
+        console.log('userData', userData)
 
         if (userData) {
           Cookie.set('token', userData.jwt, {
             expires: 1 / 2
           })
-          this.$axios.setHeader('Authorization', `Bearer ${userData}`)
+          this.$axios.setHeader('Authorization', `Bearer ${userData.jwt}`)
 
           this.$store.commit(types.SET_TOKEN, userData.jwt)
           this.$store.commit(types.SET_USER_DATA, userData.user)
