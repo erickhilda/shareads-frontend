@@ -55,7 +55,7 @@ export default {
         vueI18n: {
           silentTranslationWarn: true
         },
-        defaultLocale: 'en-us',
+        defaultLocale: 'id',
         vueI18nLoader: true,
         lazy: true,
         detectBrowserLanguage: {
@@ -71,7 +71,9 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:1337'
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
@@ -81,11 +83,12 @@ export default {
     theme: {
       themes: {
         light: {
-          primary: '#f1f2f6',
-          secondary: '#2ed573',
-          accent: '#27ae60',
+          primary: '#341f97',
+          secondary: '#5f27cd',
+          accent: '#353b48',
           error: '#e74c3c',
-          warning: '#f39c12'
+          warning: '#f39c12',
+          success: '#4cd137'
         },
         dark: {
           primary: colors.blue.darken4,
