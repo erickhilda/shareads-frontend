@@ -3,12 +3,7 @@
     <v-col cols="12" sm="8" md="6">
       <v-row justify-center>
         <v-col cols="12">
-          <v-img
-            src="/img/signin-illustration.png"
-            alt="Sassy Life"
-            contain
-            height="156"
-          />
+          <v-img src="/icon.png" alt="Sassy Life" contain height="156" />
         </v-col>
       </v-row>
       <v-row justify-center>
@@ -75,9 +70,14 @@
 
 <script>
 import { mapState } from 'vuex'
+import { types } from '~/store'
+const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
-  layout: 'signin',
+  head: {
+    title: 'Login Pages'
+  },
+  layout: 'auth',
   data() {
     return {
       email: '',
@@ -108,8 +108,31 @@ export default {
     onAppendedIconClicked() {
       this.isPasswordDisplayed = !this.isPasswordDisplayed
     },
-    onSignInButtonClick() {
-      this.$router.push('/home')
+    async onSignInButtonClick() {
+      try {
+        this.$store.commit(types.SET_LOADING, false)
+        const credential = {
+          identifier: this.email,
+          password: this.password
+        }
+        const userData = await this.$axios.$post(`/auth/local`, credential)
+
+        if (userData) {
+          Cookie.set('token', userData.jwt, {
+            expires: 1 / 2
+          })
+          this.$axios.setHeader('Authorization', `Bearer ${userData}`)
+
+          this.$store.commit(types.SET_TOKEN, userData.jwt)
+          this.$store.commit(types.SET_USER_DATA, userData.user)
+
+          this.$router.replace({ name: 'home___id' })
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.$store.commit(types.SET_LOADING, false)
+      }
     }
   }
 }
