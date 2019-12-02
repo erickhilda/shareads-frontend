@@ -8,13 +8,27 @@
       </v-row>
       <v-row justify-center>
         <v-col cols="12">
-          <div class="white--text title text-center">Sign In</div>
+          <div class="white--text title text-center">Sign Up</div>
         </v-col>
       </v-row>
-      <form @submit.prevent="onSignInButtonClick" action="">
+      <form action="">
         <v-container grid-list-md fluid class="">
           <v-row wrap>
             <v-col cols="12">
+              <v-text-field
+                v-model="username"
+                v-validate="'required'"
+                :loading="isLoading"
+                :error-messages="errors.collect('username')"
+                label="Username"
+                required
+                data-vv-name="username"
+                data-vv-as="username"
+                clearable
+                flat
+                solo
+                color="primary"
+              />
               <v-text-field
                 v-model="email"
                 v-validate="'required|email'"
@@ -50,7 +64,7 @@
               <v-btn
                 :disabled="isActionButtonDisabled"
                 :loading="isLoading"
-                @click="onSignInButtonClick"
+                @click="onSignUpButtonClick"
                 class="white--text"
                 color="secondary"
                 block="block"
@@ -58,7 +72,7 @@
                 depressed="depressed"
                 type="submit"
               >
-                Sign In
+                Sign Up
               </v-btn>
             </v-col>
           </v-row>
@@ -66,9 +80,9 @@
       </form>
       <v-row justify-center class="px-4">
         <v-col cols="12">
-          Belum memiliki akun
-          <v-btn color="primary" text small nuxt="" to="/register">
-            daftar
+          Sudah memiliki akun
+          <v-btn color="primary" text small nuxt="" to="/">
+            masuk!
           </v-btn>
         </v-col>
       </v-row>
@@ -83,12 +97,13 @@ const Cookie = process.client ? require('js-cookie') : undefined
 
 export default {
   head: {
-    title: 'Login Pages'
+    title: 'Sign Up Pages'
   },
   layout: 'auth',
   data() {
     return {
       email: '',
+      username: '',
       password: '',
       isPasswordDisplayed: false,
       isActionButtonDisabled: true
@@ -116,20 +131,24 @@ export default {
     onAppendedIconClicked() {
       this.isPasswordDisplayed = !this.isPasswordDisplayed
     },
-    async onSignInButtonClick() {
+    async onSignUpButtonClick() {
       try {
         this.$store.commit(types.SET_LOADING, false)
         const credential = {
-          identifier: this.email,
+          username: this.username,
+          email: this.email,
           password: this.password
         }
-        const userData = await this.$axios.$post(`/auth/local`, credential)
+        const userData = await this.$axios.$post(
+          `/auth/local/register`,
+          credential
+        )
 
         if (userData) {
           Cookie.set('token', userData.jwt, {
             expires: 1 / 2
           })
-          this.$axios.setHeader('Authorization', `Bearer ${userData}`)
+          // this.$axios.setHeader('Authorization', `Bearer ${userData}`)
 
           this.$store.commit(types.SET_TOKEN, userData.jwt)
           this.$store.commit(types.SET_USER_DATA, userData.user)
