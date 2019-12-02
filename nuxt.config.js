@@ -3,7 +3,16 @@ import en from 'vuetify/es5/locale/en'
 import id from 'vuetify/es5/locale/id'
 import locales from './utils/locales'
 
+require('dotenv').config()
+const isDev = process.env.NODE_ENV !== 'production'
+
+const BASE_API_URL =
+  process.env.NODE_ENV !== 'production'
+    ? process.env.BASE_API_DEV
+    : process.env.BASE_API_PROD
+
 export default {
+  modern: !isDev,
   mode: 'universal',
   /*
    ** Headers of the page
@@ -49,6 +58,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/dotenv',
     [
       'nuxt-i18n',
       {
@@ -72,7 +82,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'http://localhost:1337'
+    baseURL: BASE_API_URL
   },
   /*
    ** vuetify module configuration
@@ -113,7 +123,20 @@ export default {
     /*
      ** You can extend webpack config here
      */
+    extractCSS: !isDev,
     transpile: ['vee-validate/dist/rules'],
-    extend(config, ctx) {}
+    extend(config, { isDev, isClient }) {
+      if (isDev && isClient) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /node_modules/,
+          options: {
+            fix: true
+          }
+        })
+      }
+    }
   }
 }
