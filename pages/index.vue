@@ -124,7 +124,6 @@ export default {
           password: this.password
         }
         const userData = await this.$axios.$post(`/auth/local`, credential)
-        console.log('userData', userData)
 
         if (userData) {
           Cookie.set('token', userData.jwt, {

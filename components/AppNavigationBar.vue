@@ -1,5 +1,5 @@
 <template>
-  <v-footer color="primary lighten-1" padless>
+  <v-footer fixed="" color="primary lighten-1" padless>
     <v-tabs absolute centered="" color="primary">
       <v-tab
         v-for="(nav, i) in navigationMenu"

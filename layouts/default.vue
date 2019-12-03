@@ -21,6 +21,8 @@ export default {
   components: { AppToolbar, AppNavigationBar },
   data() {
     return {}
-  }
+  },
+  mounted() {},
+  methods: {}
 }
 </script>
