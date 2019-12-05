@@ -36,16 +36,17 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ commit }, { app, $axios, req }) {
+  async nuxtServerInit({ commit }, { app, $http, req }) {
     if (req.headers.cookie) {
       const parsed = cookieparser.parse(req.headers.cookie)
       const { token } = parsed
-      $axios.setHeader('Authorization', `Bearer ${token}`)
+      $http.setHeader('Authorization', `${token}`)
+      $http.setToken(`${token}`, 'Bearer')
 
       try {
         commit(types.SET_LOADING, false)
         await commit(types.SET_TOKEN, token)
-        this.$router.replace({ name: 'home___id' })
+        this.$router.replace({ name: 'home' })
       } catch (error) {
         if (error.response) {
           console.log(error.response.data)

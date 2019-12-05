@@ -1,7 +1,4 @@
 import colors from 'vuetify/es5/util/colors'
-import en from 'vuetify/es5/locale/en'
-import id from 'vuetify/es5/locale/id'
-import locales from './utils/locales'
 
 require('dotenv').config()
 const isDev = process.env.NODE_ENV !== 'production'
@@ -12,84 +9,55 @@ const BASE_API_URL =
     : process.env.BASE_API_PROD
 
 export default {
+  // https://nuxtjs.org/api/configuration-modern
   modern: !isDev,
-  mode: 'universal',
-  /*
-   ** Headers of the page
-   */
+
+  // https://nuxtjs.org/api/configuration-head
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      {
-        hid: 'description',
-        name: 'description',
-        content: process.env.npm_package_description || ''
+    titleTemplate(title) {
+      if (title) {
+        return `${title} - Sahreads`
       }
-    ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+      return 'Shareads'
+    }
   },
-  /*
-   ** Customize the progress-bar color
-   */
-  loading: { color: '#fff' },
-  /*
-   ** Global CSS
-   */
-  css: [],
-  /*
-   ** Plugins to load before mounting the App
-   */
-  plugins: ['~plugins/vee-validate'],
-  /*
-   ** Nuxt.js dev-modules
-   */
+
+  // https://nuxtjs.org/api/configuration-modules
+  modules: [
+    // https://http.nuxtjs.org/
+    '@nuxt/http',
+
+    // https://pwa.nuxtjs.org/
+    '@nuxtjs/pwa',
+    '@nuxtjs/dotenv'
+
+    // https://github.com/nuxt-community/sentry-module
+    // "@nuxtjs/sentry",
+
+    // https://github.com/nuxt-community/analytics-module
+    // [
+    //   "@nuxtjs/google-analytics",
+    //   {
+    //     // TODO: Change this id to your Google Analytics ID
+    //     id: process.env.GOOGLE_ANALYTICS
+    //   }
+    // ]
+  ],
+  http: {
+    baseURL: BASE_API_URL
+    // proxy: true // Can be also an object with default options
+  },
+
+  // proxy: {
+  //   '': BASE_API_URL
+  // },
+
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module',
+    // Simple usage
     '@nuxtjs/vuetify'
   ],
-  /*
-   ** Nuxt.js modules
-   */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa',
-    '@nuxtjs/dotenv',
-    [
-      'nuxt-i18n',
-      {
-        vueI18n: {
-          silentTranslationWarn: true
-        },
-        defaultLocale: 'id',
-        vueI18nLoader: true,
-        lazy: true,
-        detectBrowserLanguage: {
-          useCookie: true,
-          alwaysRedirect: true
-        },
-        langDir: 'locales/',
-        locales
-      }
-    ]
-  ],
-  /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
-  axios: {
-    baseURL: BASE_API_URL
-  },
-  /*
-   ** vuetify module configuration
-   ** https://github.com/nuxt-community/vuetify-module
-   */
+
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
     theme: {
       themes: {
         light: {
@@ -110,21 +78,18 @@ export default {
           success: colors.green.accent3
         }
       }
-    },
-    lang: {
-      locales: { 'en-us': en, 'en-uk': en, id },
-      current: 'id'
     }
   },
-  /*
-   ** Build configuration
-   */
+
+  // https://nuxtjs.org/api/configuration-plugins
+  plugins: ['~plugins/vee-validate'],
+
+  // https://nuxtjs.org/api/configuration-css
+  css: ['~assets/styles/app'],
+
+  // https://nuxtjs.org/api/configuration-build
   build: {
-    /*
-     ** You can extend webpack config here
-     */
     extractCSS: !isDev,
-    transpile: ['vee-validate/dist/rules'],
     extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({

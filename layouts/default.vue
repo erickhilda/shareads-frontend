@@ -1,28 +1,22 @@
 <template>
-  <v-app>
+  <v-app id="sharead">
     <v-content>
-      <app-toolbar />
-      <v-layout justify-center align-start="">
+      <app-navigation-bar />
+      <v-layout justify-center align-center>
         <v-flex>
-          <nuxt />
+          <nuxt-child />
         </v-flex>
       </v-layout>
     </v-content>
-    <app-navigation-bar />
   </v-app>
 </template>
 
 <script>
-import AppToolbar from '~/components/AppToolbar'
 import AppNavigationBar from '~/components/AppNavigationBar'
-
 export default {
-  middleware: 'non-auth',
-  components: { AppToolbar, AppNavigationBar },
+  components: { AppNavigationBar },
   data() {
     return {}
-  },
-  mounted() {},
-  methods: {}
+  }
 }
 </script>

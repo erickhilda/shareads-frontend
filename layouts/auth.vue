@@ -1,9 +1,9 @@
 <template>
-  <v-app :dark="true">
+  <v-app id="sharead">
     <v-content>
       <v-layout justify-center align-center>
         <v-flex>
-          <nuxt />
+          <nuxt-child />
         </v-flex>
       </v-layout>
     </v-content>
@@ -12,6 +12,8 @@
 
 <script>
 export default {
-  middleware: 'auth'
+  data() {
+    return {}
+  }
 }
 </script>

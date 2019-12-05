@@ -9,22 +9,24 @@ module.exports = {
   },
   extends: [
     '@nuxtjs',
+    'plugin:nuxt/recommended',
+    'plugin:vue/recommended',
     'prettier',
-    'prettier/vue',
-    'plugin:prettier/recommended',
-    'plugin:nuxt/recommended'
+    'prettier/vue'
   ],
-  plugins: ['prettier'],
-  // add your custom rules here
+  plugins: ['import', 'vue', 'prettier', 'vuetify'],
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.vue']
+      }
+    }
+  },
   rules: {
     'no-console': 'off',
-    'no-restricted-syntax': [
-      'error',
-      {
-        selector:
-          "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
-        message: 'Unexpected property on console object was called'
-      }
-    ]
+    'no-param-reassign': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    'prettier/prettier': 'error',
+    'vuetify/no-deprecated-classes': 'error'
   }
 }

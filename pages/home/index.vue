@@ -63,15 +63,13 @@
 <script>
 import materialColorHash from 'material-color-hash'
 import { types } from '~/store'
-
 const BASE_URL =
   process.env.NODE_ENV !== 'production'
     ? process.env.BASE_API_DEV
     : process.env.BASE_API_PROD
-
 export default {
   filters: {
-    dateFilter: (value) => {
+    dateFilter: value => {
       const date = new Date(value)
       return date.toLocaleString(['en-US'], {
         year: 'numeric'
@@ -101,8 +99,9 @@ export default {
   methods: {
     async getBookData() {
       try {
-        this.$axios.setHeader('Authorization', `Bearer ${this.token}`)
-        const data = await this.$axios.$get(`/books`)
+        // this.$http.setHeader('Authorization', `${this.token}`)
+        this.$http.setToken(`${this.token}`, 'Bearer')
+        const data = await this.$http.$get(`books`)
         this.books = data
       } catch (error) {
         console.log(error)

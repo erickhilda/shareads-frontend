@@ -49,7 +49,6 @@
               :append-icon="appendedIcon"
               :error-messages="errors.collect('password')"
               :loading="isLoading"
-              @click:append="onAppendedIconClicked"
               solo
               flat
               color="primary"
@@ -59,17 +58,18 @@
               name="password"
               data-vv-name="password"
               data-vv-as="Password"
+              @click:append="onAppendedIconClicked"
             />
             <v-btn
               :disabled="isActionButtonDisabled"
               :loading="isLoading"
-              @click="onSignUpButtonClick"
               class="white--text"
               color="secondary"
               block="block"
               rounded
               depressed="depressed"
               type="submit"
+              @click="onSignUpButtonClick"
             >
               Sign Up
             </v-btn>
@@ -92,7 +92,6 @@
 import { mapState } from 'vuex'
 import { types } from '~/store'
 const Cookie = process.client ? require('js-cookie') : undefined
-
 export default {
   head: {
     title: 'Sign Up Pages'
@@ -137,21 +136,19 @@ export default {
           email: this.email,
           password: this.password
         }
-        const userData = await this.$axios.$post(
-          `/auth/local/register`,
+        const userData = await this.$http.$post(
+          `auth/local/register`,
           credential
         )
-
         if (userData) {
           Cookie.set('token', userData.jwt, {
             expires: 1 / 2
           })
-          this.$axios.setHeader('Authorization', `Bearer ${userData.jwt}`)
-
+          this.$http.setHeader('Authorization', `${userData.jwt}`)
+          this.$http.setToken(`${userData.jwt}`, 'Bearer')
           this.$store.commit(types.SET_TOKEN, userData.jwt)
           this.$store.commit(types.SET_USER_DATA, userData.user)
-
-          this.$router.replace({ name: 'home___id' })
+          this.$router.replace({ name: 'home' })
         }
       } catch (error) {
         console.log(error)

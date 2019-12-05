@@ -1,5 +1,5 @@
 <template>
-  <div>detail</div>
+  <div>detail explorer</div>
 </template>
 
 <script>
