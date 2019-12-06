@@ -4,7 +4,7 @@
       <v-carousel-item
         v-for="(book, i) in books"
         :key="i"
-        :src="`${resourceUrl}${book.cover.url}`"
+        :src="`https://picsum.photos/200`"
         gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
         reverse-transition="fade-transition"
         transition="fade-transition"
@@ -14,7 +14,7 @@
             <v-col cols="6" md="6">
               <v-card>
                 <v-img
-                  :src="`${resourceUrl}${book.cover.url}`"
+                  :src="`https://picsum.photos/200`"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   height="200px"
                   width="154"
@@ -67,6 +67,7 @@ const BASE_URL =
   process.env.NODE_ENV !== 'production'
     ? process.env.BASE_API_DEV
     : process.env.BASE_API_PROD
+
 export default {
   filters: {
     dateFilter: value => {
@@ -78,7 +79,6 @@ export default {
   },
   data() {
     return {
-      colors: ['blue', 'secondary', 'yellow darken-2', 'red', 'orange'],
       books: [],
       resourceUrl: BASE_URL
     }
@@ -99,9 +99,8 @@ export default {
   methods: {
     async getBookData() {
       try {
-        // this.$http.setHeader('Authorization', `${this.token}`)
-        this.$http.setToken(`${this.token}`, 'Bearer')
-        const data = await this.$http.$get(`books`)
+        this.$axios.setHeader('Authorization', `Bearer ${this.token}`)
+        const data = await this.$axios.$get(`/books`)
         this.books = data
       } catch (error) {
         console.log(error)

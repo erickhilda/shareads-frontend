@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-list>
-      <v-list-item v-for="item in items" :key="item.title">
+      <v-list-item v-for="(item, i) in books" :key="`${i}_${item.title}`">
         <v-list-item-avatar>
           <v-img :src="item.avatar"></v-img>
         </v-list-item-avatar>
@@ -18,81 +18,9 @@
 export default {
   data() {
     return {
-      items: [
-        {
-          title: 'Jason Oner',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Travis Howard',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Ali Connors',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Cindy Baker',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Jason Oner',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Travis Howard',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Ali Connors',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Cindy Baker',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Jason Oner',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Travis Howard',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Ali Connors',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Cindy Baker',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        }
-      ]
+      books: []
     }
-  }
+  },
+  computed: {}
 }
 </script>

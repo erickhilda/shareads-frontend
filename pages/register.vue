@@ -11,71 +11,72 @@
           <div class="white--text title text-center">Sign Up</div>
         </v-col>
       </v-row>
-      <v-container grid-list-md fluid class="">
-        <v-row wrap>
-          <v-col cols="12">
-            <v-text-field
-              v-model="username"
-              v-validate="'required'"
-              :loading="isLoading"
-              :error-messages="errors.collect('username')"
-              label="Username"
-              required
-              data-vv-name="username"
-              data-vv-as="username"
-              clearable
-              flat
-              solo
-              color="primary"
-            />
-            <v-text-field
-              v-model="email"
-              v-validate="'required|email'"
-              :loading="isLoading"
-              :error-messages="errors.collect('email')"
-              label="Email"
-              required
-              data-vv-name="email"
-              data-vv-as="email"
-              clearable
-              flat
-              solo
-              color="primary"
-            />
-            <v-text-field
-              v-model="password"
-              v-validate="'required'"
-              :type="isPasswordDisplayed ? 'text' : 'password'"
-              :append-icon="appendedIcon"
-              :error-messages="errors.collect('password')"
-              :loading="isLoading"
-              solo
-              flat
-              color="primary"
-              clearable="clearable"
-              required="required"
-              label="Password"
-              name="password"
-              data-vv-name="password"
-              data-vv-as="Password"
-              @click:append="onAppendedIconClicked"
-            />
-            <v-btn
-              :disabled="isActionButtonDisabled"
-              :loading="isLoading"
-              class="white--text"
-              color="secondary"
-              block="block"
-              rounded
-              depressed="depressed"
-              type="submit"
-              @click="onSignUpButtonClick"
-            >
-              Sign Up
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
+      <v-form
+        ref="regForm"
+        lazy-validation=""
+        @submit.prevent="onSignUpButtonClick"
+      >
+        <v-container grid-list-md fluid class="">
+          <v-row wrap>
+            <v-col cols="12">
+              <v-text-field
+                v-model="username"
+                :loading="isLoading"
+                label="Username"
+                required
+                :rules="requiredValidate"
+                clearable
+                flat
+                outlined=""
+                dense=""
+                solo
+                color="primary"
+              />
+              <v-text-field
+                v-model="email"
+                :loading="isLoading"
+                label="Email"
+                required
+                clearable
+                flat
+                outlined=""
+                dense=""
+                :rules="emailValidate"
+                solo
+                color="primary"
+              />
+              <v-text-field
+                v-model="password"
+                :type="isPasswordDisplayed ? 'text' : 'password'"
+                :append-icon="appendedIcon"
+                :loading="isLoading"
+                solo
+                flat
+                dense=""
+                outlined=""
+                color="primary"
+                clearable=""
+                required=""
+                :rules="requiredValidate"
+                label="Password"
+                name="password"
+                @click:append="onAppendedIconClicked"
+              />
+              <v-btn
+                :loading="isLoading"
+                class="white--text"
+                color="secondary"
+                block="block"
+                rounded
+                depressed="depressed"
+                type="submit"
+              >
+                Sign Up
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-form>
       <v-row justify-center class="px-4">
         <v-col cols="12">
           Sudah memiliki akun
@@ -103,7 +104,12 @@ export default {
       username: '',
       password: '',
       isPasswordDisplayed: false,
-      isActionButtonDisabled: true
+      isActionButtonDisabled: true,
+      emailValidate: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+      ],
+      requiredValidate: [v => !!v || 'This filed is required']
     }
   },
   computed: {
@@ -112,43 +118,32 @@ export default {
       return this.isPasswordDisplayed ? 'mdi-eye-off' : 'mdi-eye'
     }
   },
-  watch: {
-    errors: {
-      handler({ items }) {
-        if (items.length === 0) {
-          this.isActionButtonDisabled = false
-        } else {
-          this.isActionButtonDisabled = true
-        }
-      },
-      deep: true
-    }
-  },
   methods: {
     onAppendedIconClicked() {
       this.isPasswordDisplayed = !this.isPasswordDisplayed
     },
     async onSignUpButtonClick() {
       try {
-        this.$store.commit(types.SET_LOADING, false)
-        const credential = {
-          username: this.username,
-          email: this.email,
-          password: this.password
-        }
-        const userData = await this.$http.$post(
-          `auth/local/register`,
-          credential
-        )
-        if (userData) {
-          Cookie.set('token', userData.jwt, {
-            expires: 1 / 2
-          })
-          this.$http.setHeader('Authorization', `${userData.jwt}`)
-          this.$http.setToken(`${userData.jwt}`, 'Bearer')
-          this.$store.commit(types.SET_TOKEN, userData.jwt)
-          this.$store.commit(types.SET_USER_DATA, userData.user)
-          this.$router.replace({ name: 'home' })
+        if (this.$refs.regForm.validate()) {
+          this.$store.commit(types.SET_LOADING, false)
+          const credential = {
+            username: this.username,
+            email: this.email,
+            password: this.password
+          }
+          const userData = await this.$axios.$post(
+            `/auth/local/register`,
+            credential
+          )
+          if (userData) {
+            Cookie.set('token', userData.jwt, {
+              expires: 1 / 2
+            })
+            this.$axios.setHeader('Authorization', `Bearer ${userData.jwt}`)
+            this.$store.commit(types.SET_TOKEN, userData.jwt)
+            this.$store.commit(types.SET_USER_DATA, userData.user)
+            this.$router.replace({ name: 'home' })
+          }
         }
       } catch (error) {
         console.log(error)
