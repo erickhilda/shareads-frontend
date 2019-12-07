@@ -1,10 +1,10 @@
 <template>
-  <v-footer fixed="" color="primary lighten-1" padless>
+  <v-footer fixed="" app="" color="primary lighten-1" padless>
     <v-tabs absolute centered="" color="primary">
       <v-tab
         v-for="(nav, i) in navigationMenu"
         :key="i"
-        :to="nav.to"
+        :to="{ name: nav.to }"
         class="primary--text"
       >
         <v-icon>{{ nav.icon }}</v-icon>

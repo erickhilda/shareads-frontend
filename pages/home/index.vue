@@ -1,86 +1,60 @@
 <template>
-  <div>
-    <v-carousel cycle="" height="400" hide-delimiters="">
-      <v-carousel-item
-        v-for="(book, i) in books"
-        :key="i"
-        :src="`https://picsum.photos/200`"
-        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-        reverse-transition="fade-transition"
-        transition="fade-transition"
+  <v-container>
+    <v-row align="start" justify="start" class="ml-5">
+      <h1 class="headline">Read Now</h1>
+    </v-row>
+    <v-divider />
+    <v-row>
+      <v-col
+        v-for="(book, i) in readingList"
+        :key="`${book.title}_${i}`"
+        cols="6"
       >
-        <v-container fluid fill-height>
-          <v-row align="center" justify="center">
-            <v-col cols="6" md="6">
-              <v-card>
-                <v-img
-                  :src="`https://picsum.photos/200`"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  height="200px"
-                  width="154"
-                />
-              </v-card>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="title text-center white--text">
-                {{ book.title }}
-              </div>
-              <div class="subtitle-1 text-center grey--text">
-                {{ book.Author }} ({{ book.publicationYear | dateFilter }})
-              </div>
-              <v-row align="center" justify="center">
-                <div
-                  v-for="(category, j) in book.categories"
-                  :key="`category_${j}`"
-                >
-                  <v-chip
-                    :color="colorHash(category.name)"
-                    small=""
-                    class="ma-2"
-                  >
-                    {{ category.name }}
-                  </v-chip>
-                </div>
-              </v-row>
-              <v-row align="center" justify="center">
-                <div>
-                  <v-btn color="white" outlined="" small="" rounded="">
-                    Borrow Now
-                  </v-btn>
-                </div>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-carousel-item>
-    </v-carousel>
-    <div>
-      Read Now
-    </div>
-  </div>
+        <app-book-card
+          :have-action="false"
+          :title="book.title"
+          :author="book.author"
+          :publication-year="book.publicationYear"
+        />
+      </v-col>
+    </v-row>
+    <v-row align="start" justify="start" class="ml-5">
+      <h1 class="headline">My Book</h1>
+    </v-row>
+    <v-divider />
+    <v-row>
+      <v-col
+        v-for="(book, i) in myBookList"
+        :key="`${book.title}_${i}`"
+        cols="6"
+      >
+        <app-book-card
+          :have-action="false"
+          :title="book.title"
+          :author="book.author"
+          :publication-year="book.publicationYear"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import materialColorHash from 'material-color-hash'
 import { types } from '~/store'
+import AppBookCard from '~/components/AppBookCard'
+
 const BASE_URL =
   process.env.NODE_ENV !== 'production'
     ? process.env.BASE_API_DEV
     : process.env.BASE_API_PROD
 
 export default {
-  filters: {
-    dateFilter: value => {
-      const date = new Date(value)
-      return date.toLocaleString(['en-US'], {
-        year: 'numeric'
-      })
-    }
-  },
+  components: { AppBookCard },
   data() {
     return {
-      books: [],
-      resourceUrl: BASE_URL
+      resourceUrl: BASE_URL,
+      myBookList: [],
+      readingList: []
     }
   },
   computed: {
@@ -91,24 +65,36 @@ export default {
       set(token) {
         this.$store.commit(types.SET_TOKEN, token)
       }
+    },
+    userData: {
+      get() {
+        return this.$store.state.userData
+      },
+      set(userData) {
+        this.$store.commit(types.SET_USER_DATA, userData)
+      }
     }
   },
+  created() {},
   mounted() {
-    this.getBookData()
+    this.getBooksData()
   },
   methods: {
-    async getBookData() {
+    async getBooksData() {
       try {
         this.$axios.setHeader('Authorization', `Bearer ${this.token}`)
-        const data = await this.$axios.$get(`/books`)
-        this.books = data
+        const data = await this.$axios.$get(`books`)
+        data.map(book => {
+          if (book.users[0].id === this.userData.id && book.readNow === true) {
+            this.readingList.push(book)
+            return book
+          } else if (book.users[0].id === this.userData.id) {
+            this.myBookList.push(book)
+          }
+        })
       } catch (error) {
         console.log(error)
       }
-    },
-    colorHash(color) {
-      const style = materialColorHash(color)
-      return style.backgroundColor
     }
   }
 }

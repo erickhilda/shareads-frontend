@@ -116,9 +116,7 @@ export default {
           }
           const userData = await this.$axios.$post(`/auth/local`, credential)
           if (userData) {
-            Cookie.set('token', userData.jwt, {
-              expires: 1 / 2
-            })
+            Cookie.set('userData', userData, { expires: 1 / 2 })
             this.$axios.setHeader('Authorization', `Bearer ${userData.jwt}`)
             this.$store.commit(types.SET_TOKEN, userData.jwt)
             this.$store.commit(types.SET_USER_DATA, userData.user)
