@@ -26,6 +26,16 @@
             <v-list-item-subtitle class="text-center">
               {{ currentBook.author }}
               ({{ currentBook.publicationYear | dateFilter }})
+              <v-chip
+                v-if="currentBook.available"
+                label=""
+                class="align-start ma-2"
+                color="secondary"
+                text-color="white"
+                small=""
+              >
+                available
+              </v-chip>
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>

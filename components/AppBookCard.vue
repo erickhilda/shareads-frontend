@@ -23,7 +23,7 @@
           rounded=""
           @click="$emit('action', $event)"
         >
-          Borrow Now
+          See Detail
         </v-btn>
       </div>
     </v-img>
