@@ -3,6 +3,7 @@
     <v-row>
       <v-col v-for="(book, i) in books" :key="`${book.title}_${i}`" cols="6">
         <app-book-card
+          :is-reading="false"
           :title="book.title"
           :author="book.author"
           :publication-year="book.publicationYear"
@@ -56,6 +57,7 @@ export default {
       try {
         this.$axios.setHeader('Authorization', `Bearer ${this.token}`)
         const data = await this.$axios.$get(`books`)
+        console.log(data)
         data.map(book => {
           if (book.users[0].id !== this.userData.id) {
             this.books.push(book)
