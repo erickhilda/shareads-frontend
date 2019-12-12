@@ -1,11 +1,11 @@
 <template>
   <v-app id="sharead">
     <v-content>
-      <v-layout justify-center align-center>
-        <v-flex>
+      <v-row justify="center" align="center">
+        <v-col>
           <nuxt-child />
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </v-content>
   </v-app>
 </template>

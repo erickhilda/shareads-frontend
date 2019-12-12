@@ -25,7 +25,7 @@ export default {
   // https://nuxtjs.org/api/configuration-modules
   modules: [
     // https://http.nuxtjs.org/
-    '@nuxt/http',
+    '@nuxtjs/axios',
 
     // https://pwa.nuxtjs.org/
     '@nuxtjs/pwa',
@@ -43,7 +43,7 @@ export default {
     //   }
     // ]
   ],
-  http: {
+  axios: {
     baseURL: BASE_API_URL
     // proxy: true // Can be also an object with default options
   },
@@ -82,7 +82,7 @@ export default {
   },
 
   // https://nuxtjs.org/api/configuration-plugins
-  plugins: ['~plugins/vee-validate'],
+  plugins: [{ src: '~plugins/persist', ssr: false }],
 
   // https://nuxtjs.org/api/configuration-css
   css: ['~assets/styles/app'],

@@ -1264,6 +1264,17 @@
     webpack-node-externals "^1.7.2"
     webpackbar "^4.0.0"
 
+"@nuxtjs/axios@^5.8.0":
+  version "5.8.0"
+  resolved "https://registry.yarnpkg.com/@nuxtjs/axios/-/axios-5.8.0.tgz#78e5abd300bfd6f622e3006ab6f4ef4ef5ff9fdf"
+  integrity sha512-1+I2mTUuydKkY/Jz1InpLpkGWpReO5USNWxZpPaQL3py4Kv3sDF83ll/uHGngosyXr+OKBXoALRLCjmwSY77lg==
+  dependencies:
+    "@nuxtjs/proxy" "^1.3.3"
+    axios "^0.19.0"
+    axios-retry "^3.1.2"
+    consola "^2.10.1"
+    defu "^0.0.3"
+
 "@nuxtjs/dotenv@^1.4.1":
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/@nuxtjs/dotenv/-/dotenv-1.4.1.tgz#dd5abb98e22cc7ae27139d3aa606151034293128"
@@ -2195,6 +2206,21 @@ aws4@^1.8.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.9.0.tgz#24390e6ad61386b0a747265754d2a17219de862c"
   integrity sha512-Uvq6hVe90D0B2WEnUqtdgY1bATGz3mw33nH9Y+dmA+w5DHvUmBgkr5rM/KCHpCsiFNRUfokW/szpPPgMK2hm4A==
+
+axios-retry@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/axios-retry/-/axios-retry-3.1.2.tgz#4f4dcbefb0b434e22b72bd5e28a027d77b8a3458"
+  integrity sha512-+X0mtJ3S0mmia1kTVi1eA3DAC+oWnT2A29g3CpkzcBPMT6vJm+hn/WiV9wPt/KXLHVmg5zev9mWqkPx7bHMovg==
+  dependencies:
+    is-retry-allowed "^1.1.0"
+
+axios@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.0.tgz#8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8"
+  integrity sha512-1uvKqKQta3KBxIz14F2v06AEHZ/dIoeKfbTRkK1E5oqjDnuEerLmYTgJB5AiQZHJcljpg1TuRzdjDR06qNk0DQ==
+  dependencies:
+    follow-redirects "1.5.10"
+    is-buffer "^2.0.2"
 
 babel-code-frame@^6.26.0:
   version "6.26.0"
@@ -3631,6 +3657,13 @@ debug@3.2.6, debug@^3.0.0, debug@^3.1.0, debug@^3.2.6:
   dependencies:
     ms "^2.1.1"
 
+debug@=3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
+  dependencies:
+    ms "2.0.0"
+
 debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
@@ -3663,7 +3696,7 @@ deep-is@~0.1.3:
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
   integrity sha1-s2nW+128E+7PUk+RsHD+7cNXzzQ=
 
-deepmerge@^4.0.0, deepmerge@^4.1.1:
+deepmerge@^4.0.0, deepmerge@^4.1.1, deepmerge@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
   integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
@@ -4813,6 +4846,13 @@ fn-name@~2.0.1:
   resolved "https://registry.yarnpkg.com/fn-name/-/fn-name-2.0.1.tgz#5214d7537a4d06a4a301c0cc262feb84188002e7"
   integrity sha1-UhTXU3pNBqSjAcDMJi/rhBiAAuc=
 
+follow-redirects@1.5.10:
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
+  dependencies:
+    debug "=3.1.0"
+
 follow-redirects@^1.0.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.9.0.tgz#8d5bcdc65b7108fe1508649c79c12d732dcedb4f"
@@ -5674,6 +5714,11 @@ is-buffer@^1.1.5:
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
+is-buffer@^2.0.2:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-2.0.4.tgz#3e572f23c8411a5cfd9557c849e3665e0b290623"
+  integrity sha512-Kq1rokWXOPXWuaMAqZiJW4XxsmD9zGx9q4aePabbn3qCRGedtH7Cm+zV8WETitMfu1wdh+Rvd6w5egwSngUX2A==
+
 is-callable@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.1.4.tgz#1e1adf219e1eeb684d691f9d6a05ff0d30a24d75"
@@ -5896,6 +5941,11 @@ is-resolvable@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-resolvable/-/is-resolvable-1.1.0.tgz#fb18f87ce1feb925169c9a407c19318a3206ed88"
   integrity sha512-qgDYXFSR5WvEfuS5dMj6oTMEbrrSaM0CrFk2Yiq/gXnBvD9pMa2jGXxyhGLfvhZpuMZe18CJpFxAt3CRs42NMg==
+
+is-retry-allowed@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-1.2.0.tgz#d778488bd0a4666a3be8a1482b9f2baafedea8b4"
+  integrity sha512-RUbUeKwvm3XG2VYamhJL1xFktgjvPzL0Hq8C+6yrWIswDy3BIXGqCxhxkc30N9jqK311gVU137K8Ei55/zVJRg==
 
 is-stream@^1.1.0:
   version "1.1.0"
@@ -9673,6 +9723,11 @@ shellwords@^0.1.1:
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
 
+shvl@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/shvl/-/shvl-2.0.0.tgz#55fd550b6e81bf7574f2f576b8b5c1ffae74e10f"
+  integrity sha512-WbpzSvI5XgVGJ3A4ySGe8hBxj0JgJktfnoLhhJmvITDdK21WPVWwgG8GPlYEh4xqdti3Ff7PJ5G0QrRAjNS0Ig==
+
 sigmund@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/sigmund/-/sigmund-1.0.1.tgz#3ff21f198cad2175f9f3b781853fd94d0d19b590"
@@ -10766,11 +10821,6 @@ vary@^1.1.2, vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
-vee-validate@^2.2.15:
-  version "2.2.15"
-  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.2.15.tgz#dc6c925d21e57288d3308fe5a39a0941036c575a"
-  integrity sha512-4TOsI8XwVkKVLkg8Nhmy+jyoJrR6XcTRDyxBarzcCvYzU61zamipS1WsB6FlDze8eJQpgglS4NXAS6o4NDPs1g==
-
 vendors@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.3.tgz#a6467781abd366217c050f8202e7e50cc9eef8c0"
@@ -10936,6 +10986,14 @@ vuetify@^2.1.0:
   version "2.1.12"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.1.12.tgz#7b02de32d7a169db468576ea5d5e8f60c603069a"
   integrity sha512-xMaEX9pz/9bdV0jecuvINk5FD43bUkzfeLKfvrwBu0qroLTpLCdc7mZ7AURAxR5mVmgjqR9BFc7qRtQHA1Lq0Q==
+
+vuex-persistedstate@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/vuex-persistedstate/-/vuex-persistedstate-2.7.0.tgz#f60aae4e1163bf293696a625526dbffaa42e429e"
+  integrity sha512-mpko65DUMBY4mF4sSGsgrqjE7fwO373LFZeuNrC55glRuBBAK4dkgzjr4j4Bij7WtMoKuo2t2w0NGenjauISaQ==
+  dependencies:
+    deepmerge "^4.2.2"
+    shvl "^2.0.0"
 
 vuex@^3.1.1:
   version "3.1.2"

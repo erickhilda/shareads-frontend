@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@nuxt/http": "^0.3.8",
+    "@nuxtjs/axios": "^5.8.0",
     "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/google-analytics": "^2.2.1",
     "@nuxtjs/pwa": "^3.0.0-beta.19",
@@ -51,7 +52,7 @@
     "lru-cache": "^5.1.1",
     "material-color-hash": "^0.1.6",
     "nuxt": "^2.10.2",
-    "vee-validate": "^2.2.15"
+    "vuex-persistedstate": "^2.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",

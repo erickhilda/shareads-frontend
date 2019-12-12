@@ -1,86 +1,202 @@
 <template>
-  <div>
-    <v-carousel cycle="" height="400" hide-delimiters="">
-      <v-carousel-item
-        v-for="(book, i) in books"
-        :key="i"
-        :src="`${resourceUrl}${book.cover.url}`"
-        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-        reverse-transition="fade-transition"
-        transition="fade-transition"
+  <v-container>
+    <v-row align="start" justify="start" class="ml-5">
+      <h1 class="headline">Read Now</h1>
+    </v-row>
+    <v-divider />
+    <v-row>
+      <v-col
+        v-for="(book, i) in readingList"
+        :key="`${book.title}_${i}`"
+        cols="6"
       >
-        <v-container fluid fill-height>
-          <v-row align="center" justify="center">
-            <v-col cols="6" md="6">
-              <v-card>
-                <v-img
-                  :src="`${resourceUrl}${book.cover.url}`"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  height="200px"
-                  width="154"
-                />
-              </v-card>
-            </v-col>
-            <v-col cols="12" md="6">
-              <div class="title text-center white--text">
-                {{ book.title }}
-              </div>
-              <div class="subtitle-1 text-center grey--text">
-                {{ book.Author }} ({{ book.publicationYear | dateFilter }})
-              </div>
-              <v-row align="center" justify="center">
-                <div
-                  v-for="(category, j) in book.categories"
-                  :key="`category_${j}`"
-                >
-                  <v-chip
-                    :color="colorHash(category.name)"
-                    small=""
-                    class="ma-2"
-                  >
-                    {{ category.name }}
-                  </v-chip>
-                </div>
-              </v-row>
-              <v-row align="center" justify="center">
-                <div>
-                  <v-btn color="white" outlined="" small="" rounded="">
-                    Borrow Now
-                  </v-btn>
-                </div>
-              </v-row>
-            </v-col>
+        <app-book-card
+          :have-action="false"
+          :title="book.title"
+          :author="book.author"
+          :publication-year="book.publicationYear"
+        />
+      </v-col>
+    </v-row>
+    <v-row align="start" justify="start" class="ml-5">
+      <h1 class="headline">My Book</h1>
+    </v-row>
+    <v-divider />
+    <v-row>
+      <v-col
+        v-for="(book, i) in myBookList"
+        :key="`${book.title}_${i}`"
+        cols="6"
+      >
+        <app-book-card
+          :is-reading="false"
+          :have-action="false"
+          :title="book.title"
+          :author="book.author"
+          :publication-year="book.publicationYear"
+        />
+      </v-col>
+      <v-col cols="6">
+        <v-card
+          color="grey light-1"
+          height="200"
+          @click="isAddBookDialog = !isAddBookDialog"
+        >
+          <v-row class="fill-height" align="center" justify="center">
+            <v-icon color="white" size="48">
+              mdi-plus-circle-outline
+            </v-icon>
+            <div class="white--text subtitle">
+              Add New Book
+            </div>
           </v-row>
-        </v-container>
-      </v-carousel-item>
-    </v-carousel>
-    <div>
-      Read Now
-    </div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-dialog
+      v-model="isAddBookDialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-toolbar-title>Add New Book</v-toolbar-title>
+          <v-spacer />
+          <v-toolbar-items class="pa-2">
+            <v-btn color="error" outlined="" @click="isAddBookDialog = false">
+              Cancel
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-card-text>
+          <v-container grid-list-md fluid class="">
+            <v-row wrap>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="inputTitle"
+                  label="Book Title"
+                  required
+                  clearable
+                  flat
+                  outlined=""
+                  dense=""
+                  color="primary"
+                />
+                <v-text-field
+                  v-model="inputAuthor"
+                  label="Author"
+                  required
+                  clearable
+                  flat
+                  outlined=""
+                  dense=""
+                  color="primary"
+                />
+                <v-dialog
+                  ref="dialog"
+                  v-model="isPublicationYearDialog"
+                  :return-value.sync="inputPublicationYear"
+                  persistent
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="inputPublicationYear"
+                      label="Publication Year"
+                      prepend-inner-icon="mdi-calendar"
+                      readonly
+                      dense=""
+                      outlined=""
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="inputPublicationYear" scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      text
+                      color="error"
+                      @click="isPublicationYearDialog = false"
+                    >
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.dialog.save(inputPublicationYear)"
+                      >OK</v-btn
+                    >
+                  </v-date-picker>
+                </v-dialog>
+                <v-combobox
+                  v-model="inputCategories"
+                  :items="categoryList"
+                  :search-input.sync="search"
+                  hide-selected
+                  hint="Maximum of 5 tags"
+                  label="Add Categories"
+                  multiple
+                  outlined=""
+                  item-text="name"
+                  item-value="id"
+                  dense=""
+                  persistent-hint
+                  small-chips
+                >
+                  <template v-slot:no-data>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          No results matching "<strong>{{ search }}</strong
+                          >". Press <kbd>enter</kbd> to create a new one
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </template>
+                </v-combobox>
+                <v-btn
+                  class="white--text"
+                  color="secondary"
+                  block="block"
+                  rounded
+                  depressed="depressed"
+                  @click="addNewBookClicked"
+                >
+                  Submit
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script>
-import materialColorHash from 'material-color-hash'
 import { types } from '~/store'
+import AppBookCard from '~/components/AppBookCard'
+
 const BASE_URL =
   process.env.NODE_ENV !== 'production'
     ? process.env.BASE_API_DEV
     : process.env.BASE_API_PROD
+
 export default {
-  filters: {
-    dateFilter: value => {
-      const date = new Date(value)
-      return date.toLocaleString(['en-US'], {
-        year: 'numeric'
-      })
-    }
-  },
+  components: { AppBookCard },
   data() {
     return {
-      colors: ['blue', 'secondary', 'yellow darken-2', 'red', 'orange'],
-      books: [],
-      resourceUrl: BASE_URL
+      resourceUrl: BASE_URL,
+      myBookList: [],
+      readingList: [],
+      isAddBookDialog: false,
+      inputTitle: null,
+      inputAuthor: null,
+      inputPublicationYear: null,
+      isPublicationYearDialog: false,
+      inputCategories: [],
+      categoryList: [],
+      search: null
     }
   },
   computed: {
@@ -91,25 +207,66 @@ export default {
       set(token) {
         this.$store.commit(types.SET_TOKEN, token)
       }
+    },
+    userData: {
+      get() {
+        return this.$store.state.userData
+      },
+      set(userData) {
+        this.$store.commit(types.SET_USER_DATA, userData)
+      }
     }
   },
+  created() {},
   mounted() {
-    this.getBookData()
+    this.getBooksData()
+    this.getCategoryList()
   },
   methods: {
-    async getBookData() {
+    onAddBookClick() {},
+    async getBooksData() {
       try {
-        // this.$http.setHeader('Authorization', `${this.token}`)
-        this.$http.setToken(`${this.token}`, 'Bearer')
-        const data = await this.$http.$get(`books`)
-        this.books = data
+        this.$axios.setHeader('Authorization', `Bearer ${this.token}`)
+        const data = await this.$axios.$get(`books`)
+        this.myBookList = []
+        this.readingList = []
+        data.map(book => {
+          if (book.users[0].id === this.userData.id && book.readNow === true) {
+            this.readingList.push(book)
+            return book
+          } else if (book.users[0].id === this.userData.id) {
+            this.myBookList.push(book)
+          }
+        })
       } catch (error) {
         console.log(error)
       }
     },
-    colorHash(color) {
-      const style = materialColorHash(color)
-      return style.backgroundColor
+    async getCategoryList() {
+      try {
+        const data = await this.$axios.$get(`categories`)
+        this.categoryList = data
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async addNewBookClicked() {
+      try {
+        const bookData = {
+          title: this.inputTitle,
+          author: this.inputAuthor,
+          publicationYear: this.inputPublicationYear,
+          users: [this.userData.id],
+          categories: this.inputCategories
+        }
+        console.log(bookData)
+        await this.$axios.$post(`books`, bookData)
+        this.isAddBookDialog = false
+        this.getBooksData()
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }

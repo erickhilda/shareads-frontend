@@ -1,13 +1,22 @@
 <template>
   <div>
     <v-list>
-      <v-list-item v-for="item in items" :key="item.title">
+      <v-list-item
+        v-for="(item, i) in transactions"
+        :key="`${i}_${item.title}`"
+      >
         <v-list-item-avatar>
-          <v-img :src="item.avatar"></v-img>
+          <v-icon class="blue white--text">
+            mdi-calendar
+          </v-icon>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title class="font-weight-bold" v-text="item.title" />
-          <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
+          <v-list-item-title>
+            Transactions {{ item.borrowedDate | dateFilter }}
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            {{ item.subtitle }}
+          </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -16,82 +25,34 @@
 
 <script>
 export default {
+  filters: {
+    dateFilter: value => {
+      const date = new Date(value)
+      return date.toLocaleString(['en-US'], {
+        year: 'numeric',
+        day: '2-digit',
+        month: 'short'
+      })
+    }
+  },
   data() {
     return {
-      items: [
-        {
-          title: 'Jason Oner',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Travis Howard',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Ali Connors',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Cindy Baker',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Jason Oner',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Travis Howard',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Ali Connors',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Cindy Baker',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Jason Oner',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Travis Howard',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Ali Connors',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        },
-        {
-          title: 'Cindy Baker',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?"
-        }
-      ]
+      transactions: []
+    }
+  },
+  computed: {},
+  mounted() {
+    this.getDataTransaction()
+  },
+  methods: {
+    async getDataTransaction() {
+      try {
+        const data = await this.$axios.$get(`transactions`)
+        console.log(data)
+        this.transactions = data
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
