@@ -20,8 +20,37 @@
       </v-list-item>
     </v-row>
     <v-row justify="center" align="center"></v-row>
-    <v-btn color="error" @click="onLogout">Logout</v-btn>
-    <div>{{ userData }}</div>
+
+    <v-divider></v-divider>
+
+    <v-list-item
+      v-for="(list, i) in profileLists"
+      :key="i"
+      :to="{ name: list.to }"
+      class="primary--test"
+    >
+      <v-list-item-content>
+        <v-list-item-title>{{ list.text }}</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-content>
+      <!--- pick-up screen height so we can center vertically -->
+      <v-container fill-height>
+        <!--- vertical and horizontal alignment -->
+        <v-layout align-center justify-center>
+          <v-flex xs6>
+            <!--- v-flex is centered now, but we need to center button inside v-flex -->
+            <div class="text-center">
+              <v-btn color="error" @click="onLogout">Logout</v-btn>
+            </div>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+
+    <!-- <v-btn color="error" @click="onLogout">Logout</v-btn> -->
+    <!-- <div>{{ userData }}</div> -->
   </v-container>
 </template>
 
@@ -32,7 +61,12 @@ import { types } from '~/store'
 const Cookie = process.client ? require('js-cookie') : undefined
 export default {
   data() {
-    return {}
+    return {
+      profileLists: [
+        { text: 'Edit Profile', to: 'profile-editProfile', icon: '' },
+        { text: 'Privacy Policy', to: 'profile-privacyPolicy', icon: '' }
+      ]
+    }
   },
   computed: {
     userData: {
