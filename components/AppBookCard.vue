@@ -7,6 +7,16 @@
       height="200px"
     >
       <div class="ma-2">
+        <v-chip
+          v-if="isReading"
+          label=""
+          class="align-start ma-2"
+          color="success"
+          text-color="white"
+          small=""
+        >
+          read now
+        </v-chip>
         <div class="subtitle-1">
           {{ $options.filters.summery(title, 16) }}
         </div>
@@ -57,6 +67,10 @@ export default {
       type: String
     },
     haveAction: {
+      type: Boolean,
+      default: true
+    },
+    isReading: {
       type: Boolean,
       default: true
     }

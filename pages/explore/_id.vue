@@ -27,14 +27,13 @@
               {{ currentBook.author }}
               ({{ currentBook.publicationYear | dateFilter }})
               <v-chip
-                v-if="currentBook.available"
                 label=""
                 class="align-start ma-2"
-                color="secondary"
+                :color="currentBook.available ? 'secondary' : 'error'"
                 text-color="white"
                 small=""
               >
-                available
+                {{ currentBook.available | availabilty }}
               </v-chip>
             </v-list-item-subtitle>
           </v-list-item-content>
@@ -63,22 +62,114 @@
         <v-btn
           block=""
           color="primary"
-          @click="onBorrowBookClicked(currentBook)"
+          @click="isTransactionDialog = !isTransactionDialog"
         >
           Borrow Now
         </v-btn>
       </div>
     </v-row>
-    <v-dialog v-model="isBorrowDialog" width="500">
+    <v-dialog v-model="isTransactionDialog" persistent="" width="500">
       <v-card>
         <v-card-title class="headline primary white--text">
           Detail Transaction
         </v-card-title>
 
         <v-card-text>
+          <v-row wrap>
+            <v-col cols="12">
+              <v-dialog
+                ref="dialog"
+                v-model="borrowingDateDialog"
+                :return-value.sync="borrowingDate"
+                persistent
+                width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="borrowingDate"
+                    label="Borrowing Date"
+                    prepend-inner-icon="mdi-calendar"
+                    clearable=""
+                    dense=""
+                    outlined=""
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="borrowingDate" scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="error" @click="borrowingDateDialog = false"
+                    >Cancel</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.dialog.save(borrowingDate)"
+                    >OK</v-btn
+                  >
+                </v-date-picker>
+              </v-dialog>
+              <v-dialog
+                ref="dialog"
+                v-model="returningDateDialog"
+                :return-value.sync="returningDate"
+                persistent
+                width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="returningDate"
+                    label="Returning Date"
+                    prepend-inner-icon="mdi-calendar"
+                    clearable=""
+                    dense=""
+                    outlined=""
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker v-model="returningDate" scrollable>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="error" @click="returningDateDialog = false"
+                    >Cancel</v-btn
+                  >
+                  <v-btn
+                    text
+                    color="primary"
+                    @click="$refs.dialog.save(returningDate)"
+                    >OK</v-btn
+                  >
+                </v-date-picker>
+              </v-dialog>
+            </v-col>
+          </v-row>
+        </v-card-text>
+        <v-divider />
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="error" text @click="isTransactionDialog = false">
+            Cancel
+          </v-btn>
+          <v-btn
+            type="submit"
+            color="primary"
+            text
+            @click="onBorrowBookClicked(currentBook)"
+          >
+            Submit
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="isBorrowDialog" width="500">
+      <v-card>
+        <v-card-title class="headline primary white--text">
+          Transaction Success
+        </v-card-title>
+
+        <v-card-text>
           Untuk menyelesaikan transaksi peminjaman silahkan hubungi
           <span class="primary--text font-weight-bold">
-            {{ currentBook.users[0].phone }}
+            {{ currentBook.users[0].username }}
+            ({{ currentBook.users[0].phone }})
           </span>
           .Pastikan untuk membaca syarat dan ketentuan yang berlaku dalam
           peminjaman buku.
@@ -107,12 +198,20 @@ export default {
       return date.toLocaleString(['en-US'], {
         year: 'numeric'
       })
+    },
+    availabilty: value => {
+      return value ? 'available' : 'not-available'
     }
   },
   data() {
     return {
       currentBook: null,
-      isBorrowDialog: false
+      isBorrowDialog: false,
+      isTransactionDialog: false,
+      returningDateDialog: false,
+      borrowingDateDialog: false,
+      returningDate: null,
+      borrowingDate: new Date().toISOString().substr(0, 10)
     }
   },
   computed: {
@@ -154,11 +253,11 @@ export default {
         const detailTransaction = {
           books: [book.id],
           users: [book.users[0].id, this.userData.id],
-          borrowedDate: new Date().toISOString(),
-          returningDate: ''
+          borrowedDate: this.borrowingDate,
+          returningDate: this.returningDate
         }
         await this.$axios.$post(`transactions`, detailTransaction)
-        console.log(detailTransaction)
+        this.isTransactionDialog = false
         this.isBorrowDialog = true
       } catch (error) {
         console.log(error)
